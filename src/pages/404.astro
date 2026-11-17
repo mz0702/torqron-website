@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import { products } from '../data/site';
+---
+
+<Base
+  title="Page Not Found"
+  description="The page you requested does not exist on the TORQRON website. Find pelletizer die plates, extruder components, additives and spare parts in the product range."
+  solidHeader
+  footerGap
+  noindex
+>
+  <PageHero title="Page not found" lede="The page you are looking for does not exist or has moved." crumbs={[{ name: 'Page not found', href: '/404/' }]} />
+
+  <section class="limiter block block--bottom">
+    <div>
+      <div class="cta__actions">
+        <Button variant="solid" href="/">Back to the homepage</Button>
+        <Button href="/products/">All products</Button>
+      </div>
+      <h2 class="h4">Products</h2>
+      <ul class="dash links">
+        {
+          products.map((p) => (
+            <li>
+              <a href={`/products/${p.slug}/`}>{p.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .links {
+    columns: 3 16rem;
+    column-gap: 2rem;
+  }
+
+  .links li {
+    break-inside: avoid;
+  }
+</style>

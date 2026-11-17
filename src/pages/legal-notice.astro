@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+
+const crumbs = [{ name: 'Legal notice', href: '/legal-notice/' }];
+---
+
+<Base
+  title="Legal Notice"
+  description="Legal notice for the TORQRON website: company details of TORQRON L.L.C-FZ, e-mail, liability for content and links, copyright and third-party trademarks."
+  crumbs={crumbs}
+  solidHeader
+  footerGap
+>
+  <PageHero title="Legal notice" lede="Company details and legal information for this website." crumbs={crumbs} />
+
+  <section class="limiter block block--bottom">
+    <div>
+      <div class="prose measure">
+        <h2>Company</h2>
+        <p>
+          {site.legalName}<br />
+          {
+            site.address.map((line) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))
+          }
+          {
+            site.licence && (
+              <>
+                Licence number: {site.licence}
+                <br />
+              </>
+            )
+          }
+          E-mail: <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+
+        <h2>Liability for content</h2>
+        <p>
+          We prepare the content of this website with care, but cannot guarantee that it is complete, accurate and up to date. Product and technical information on this website is
+          for general information and does not constitute an offer.
+        </p>
+
+        <h2>Liability for links</h2>
+        <p>
+          Where this website links to external websites, the content of those websites is the sole responsibility of their operators. We have no influence on it and accept no
+          liability for it.
+        </p>
+
+        <h2>Copyright</h2>
+        <p>
+          The texts, images and design of this website are protected by copyright. Any reproduction, editing or distribution beyond what the law permits
+          requires the prior written consent of {site.name} or of the respective rights holder.
+        </p>
+
+        <h2>Trademarks</h2>
+        <p>
+          Third-party brand names mentioned on this website, such as Coperion®, Gala® or Shell®, are used only to state compatibility or to identify original products. They are the
+          property of their respective owners. Their mention does not imply any affiliation with, or endorsement by, these owners.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>

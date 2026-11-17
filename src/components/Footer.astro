@@ -1,0 +1,77 @@
+---
+import { nav, legalNav, site } from '../data/site';
+interface Props {
+  /** add white space above when the section before the footer has no rounded edge */
+  gap?: boolean;
+}
+const { gap = false } = Astro.props;
+const [productsNav, applicationsNav, servicesNav, companyNav] = nav;
+const year = new Date().getFullYear();
+---
+
+<footer class:list={['footer limiter on-dark', gap && 'footer--gap']}>
+  <div>
+    <div class="footer__main">
+      <p class="footer__tagline">Critical parts.<br />Always on time.</p>
+      <div class="footer__contact">
+        <dl>
+          <dt>E-mail</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </dl>
+        {site.phone && (
+          <dl>
+            <dt>Phone</dt>
+            <dd><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></dd>
+          </dl>
+        )}
+        <dl>
+          <dt>{site.address.length ? 'Address' : 'Active in'}</dt>
+          <dd>
+            {site.address.length
+              ? [site.legalName, ...site.address].map((line) => <>{line}<br /></>)
+              : site.regions.join(' · ')}
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="footer__rule"></div>
+
+    <nav class="footer__nav" aria-label="Footer">
+      <div>
+        <h2><a href={productsNav.href}>{productsNav.label}</a></h2>
+        <ul class="cols-2">
+          {productsNav.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2><a href={applicationsNav.href}>{applicationsNav.label}</a></h2>
+        <ul>
+          {applicationsNav.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2><a href={servicesNav.href}>{servicesNav.label}</a></h2>
+        <ul>
+          {servicesNav.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2><a href={companyNav.href}>{companyNav.label}</a></h2>
+        <ul>
+          {companyNav.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+          <li><a href={site.machineListPdf}>Machine list (PDF)</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="footer__rule"></div>
+
+    <div class="footer__bottom">
+      <span>© {year} {site.legalName}</span>
+      <ul>
+        {legalNav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,253 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import { img } from '../data/images';
+import { products, applications, services, site } from '../data/site';
+
+const stats = [
+  { value: '20+', label: 'Years of combined experience' },
+  { value: '28+', label: 'Industrial facilities supported' },
+  { value: '12', label: 'Countries served' },
+  { value: '99%+', label: 'On-time delivery' },
+];
+
+const reasons = [
+  {
+    title: 'Lead times the market does not expect',
+    text: 'Optimized global logistics and fast response to urgent requests. Critical parts get the fastest possible delivery, on schedules you can plan around.',
+  },
+  {
+    title: 'OEM-grade quality, documented',
+    text: 'All parts are sourced or manufactured to strict specifications and undergo detailed quality control, with material and process documentation.',
+  },
+  {
+    title: '20+ years in petrochemical and polymer plants',
+    text: 'Our team comes from petrochemical plant engineering, extrusion and granulation, industrial filtration and high-pressure sealing systems.',
+  },
+  {
+    title: 'Global reach, local understanding',
+    text: 'Active in the Middle East, Europe, Turkey and Asia, with proven experience adapting to different regulatory and operational environments.',
+  },
+  {
+    title: 'One partner from RFQ to commissioning',
+    text: 'Spare parts procurement, European-standard refurbishment, installation, logistics consulting and on-site services. Consolidated procurement keeps cost and coordination down.',
+  },
+];
+
+const steps = [
+  {
+    title: 'Send what you have',
+    text: 'A part number, an OEM reference, a drawing, a material specification, an application description or simply a photo.',
+  },
+  {
+    title: 'We identify and source it',
+    text: 'Our technical procurement team identifies the item, selects the supplier and manages documentation and quality control.',
+  },
+  {
+    title: 'Delivered on schedule',
+    text: 'Global logistics coordination with full documentation and compliance support, wherever your plant is.',
+  },
+];
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'TORQRON product range',
+    itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: `${site.url}/products/${p.slug}/` })),
+  },
+];
+---
+
+<Base
+  title="TORQRON – Pelletizer, Extruder & Plant Spare Parts"
+  description="TORQRON supplies pelletizer die plates and knives, extruder components, polymer additives, filtration and spare parts to petrochemical and plastics plants."
+  schema={schema}
+>
+  <link slot="head" rel="preload" as="image" href="/media/hero-poster.jpg" fetchpriority="high" />
+
+  <div class="hero on-dark">
+    <video class="hero__media" poster="/media/hero-poster.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-hero-video>
+      <source data-src="/media/hero-sm.mp4" media="(max-width: 700px)" type="video/mp4" />
+      <source data-src="/media/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero__shade"></div>
+    <div class="hero__content">
+      <p class="hero__title">
+        <span class="line" style="--i:0"><span>Critical parts.</span></span>
+        <span class="line" style="--i:1"><span>Always on time.</span></span>
+        <span class="hero__rule"></span>
+      </p>
+      <div class="hero__actions">
+        <Button variant="solid" tone="white" href="/contact/">Request a quote</Button>
+        <Button tone="white" href="#products">Explore products</Button>
+      </div>
+    </div>
+    <span class="hero__cue" aria-hidden="true"></span>
+  </div>
+
+  <div class="page-body">
+    <section class="limiter">
+      <div class="intro grid12">
+        <div class="intro__main">
+          <h1 class="kicker" data-reveal>Spare parts and process components for petrochemical and polymer plants</h1>
+          <p class="intro__text" data-reveal="mask" style="--i:1">
+            TORQRON keeps plants running: precision granulation tools, extruder components, polymer additives and mission-critical spares, delivered when you need them.
+          </p>
+        </div>
+        <dl class="stats">
+          {
+            stats.map((s, i) => (
+              <div class="stat" data-reveal style={`--i:${i + 1}`}>
+                <dt>{s.label}</dt>
+                <dd data-count>{s.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="panel panel--tint limiter" id="products">
+      <div class="block block--top block--bottom">
+        <div class="section-head">
+          <div class="section-head__intro">
+            <h2 data-reveal="mask">Products</h2>
+            <p data-reveal style="--i:1">
+              From <a href="/products/granulation-tools/">pelletizer die plates and knives</a> and <a href="/products/extrusion-components/">extruder screw elements</a>{' '}
+              to <a href="/products/plastic-additives/">polymer additives</a>, <a href="/products/industrial-filtration/">filtration</a>{' '}
+              and <a href="/products/sealing-technology/">sealing technology</a>. Twelve product groups, one supplier.
+            </p>
+          </div>
+          <div data-reveal style="--i:1"><Button href="/products/">All products</Button></div>
+        </div>
+        <div class="cards cards--4">
+          {
+            products.map((p) => (
+              <Card compact href={`/products/${p.slug}/`} title={p.name} image={p.image} alt={p.imageAlt} />
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="limiter block block--top block--bottom">
+      <div class="spot grid12">
+        <div class="spot__head">
+          <h2 data-reveal="mask">Why procurement teams choose TORQRON</h2>
+          <div data-reveal style="--i:1"><Button href="/about/">About TORQRON</Button></div>
+        </div>
+        <ol class="spot__list" data-spot>
+          {
+            reasons.map((r, i) => (
+              <li class:list={['spot__item', i === 0 && 'is-active']}>
+                <h3>{r.title}</h3>
+                <p>{r.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="inspect on-dark limiter">
+      <div class="inspect__grid grid12">
+        <figure class="inspect__figure" data-reveal>
+          <Image src={img('die-plate-cutout.png')} alt="Pelletizer die plate with concentric rows of die holes and a bolt circle" widths={[480, 760, 1100]} sizes="(max-width: 1100px) 70vw, 40vw" quality={82} loading="eager" />
+          <!-- callouts: three statements from the die plate specification, set like drawing leaders -->
+          <svg class="inspect__marks" viewBox="0 0 600 520" aria-hidden="true">
+            <path pathLength="1" style="--i:0" d="M347 173 L372 38 H600"></path>
+            <circle cx="347" cy="173" r="4" style="--i:0"></circle>
+            <text x="600" y="27" text-anchor="end" style="--i:0">Manufactured to precise tolerances</text>
+            <path pathLength="1" style="--i:1" d="M423 341 L452 482 H600"></path>
+            <circle cx="423" cy="341" r="4" style="--i:1"></circle>
+            <text x="600" y="505" text-anchor="end" style="--i:1">European-standard surface finishing</text>
+            <path pathLength="1" style="--i:2" d="M122 320 L84 482 H0"></path>
+            <circle cx="122" cy="320" r="4" style="--i:2"></circle>
+            <text x="0" y="505" style="--i:2">OEM-compatible for major brands</text>
+          </svg>
+        </figure>
+        <div class="inspect__text">
+          <h2 data-reveal="mask">Inspected before it ships</h2>
+          <p data-reveal style="--i:1">
+            Every component is matched to its specification with engineering precision. That is how a die plate from TORQRON fits the pelletizer it was ordered for.
+          </p>
+          <ul class="dash" data-reveal style="--i:2">
+            <li>Selected manufacturer partnerships</li>
+            <li>Material and process documentation</li>
+            <li>Technical inspection before dispatch</li>
+            <li>Compliance with international industrial standards</li>
+            <li>Traceability for critical components</li>
+          </ul>
+          <div data-reveal style="--i:3"><Button tone="white" href="/capabilities/">Manufacturing capabilities</Button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="limiter block block--top block--bottom" id="applications">
+      <div>
+        <div class="section-head">
+          <div class="section-head__intro">
+            <h2 data-reveal="mask">Applications</h2>
+            <p data-reveal style="--i:1">Our expertise spans the entire petrochemical value chain. Six industries, each with its own demands on parts and service.</p>
+          </div>
+          <div data-reveal style="--i:1"><Button href="/applications/">All applications</Button></div>
+        </div>
+        <div class="cards cards--wide">
+          {
+            applications.map((a) => (
+              <Card href={`/applications/${a.slug}/`} title={a.name} image={a.image} alt={a.imageAlt} teaser={a.teaser} />
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--tint limiter">
+      <div class="split grid12 block block--top block--bottom">
+        <div class="split__head">
+          <h2 data-reveal="mask">Services</h2>
+          <p data-reveal style="--i:1">Engineering and procurement services built for fast execution, technical accuracy and seamless integration into your production environment.</p>
+          <div data-reveal style="--i:2"><Button href="/services/">All services</Button></div>
+        </div>
+        <ul class="rows split__body">
+          {
+            services.map((s, i) => (
+              <li class="row" data-reveal style={`--i:${i}`}>
+                <h3 class="row__title"><a href={`/services/${s.slug}/`}>{s.name}</a></h3>
+                <p>{s.teaser}</p>
+                <span class="round-btn" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="limiter">
+      <div class="closing">
+        <div class="closing__head">
+          <h2 data-reveal="mask">Need a part? Send us what you have.</h2>
+          <div class="cta__actions" data-reveal style="--i:1">
+            <Button variant="solid" href="/contact/">Request a quote</Button>
+            <Button icon="mail" href={`mailto:${site.email}`}>{site.email}</Button>
+          </div>
+        </div>
+        <ol class="steps">
+          {
+            steps.map((s, i) => (
+              <li class="step" data-reveal="rule" style={`--i:${i}`}>
+                <span class="step__no" aria-hidden="true" />
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+  </div>
+</Base>

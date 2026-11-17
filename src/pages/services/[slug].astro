@@ -1,0 +1,168 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import CtaBar from '../../components/CtaBar.astro';
+import { applications, products, services, site } from '../../data/site';
+import { bySlug, faqSchema } from '../../data/applications';
+import { serviceContent } from '../../data/services';
+
+export function getStaticPaths() {
+  return services.map((s) => {
+    const content = serviceContent[s.slug];
+    if (!content) throw new Error(`No content in src/data/services.ts for service "${s.slug}"`);
+    return { params: { slug: s.slug }, props: { s, content } };
+  });
+}
+
+const { s, content: c } = Astro.props;
+
+const url = `/services/${s.slug}/`;
+const crumbs = [
+  { name: 'Services', href: '/services/' },
+  { name: s.name, href: url },
+];
+const quote = `/contact/?topic=${encodeURIComponent(c.topic)}`;
+const related = bySlug(products, c.products);
+const industries = bySlug(applications, c.applications);
+const others = services.filter((x) => x.slug !== s.slug);
+const schema = [
+  {
+    '@type': 'Service',
+    name: s.name,
+    serviceType: s.name,
+    description: c.description,
+    url: `${site.url}${url}`,
+    provider: { '@id': `${site.url}/#organization` },
+    areaServed: site.regions,
+  },
+  faqSchema(c.faq),
+];
+---
+
+<Base title={c.title} description={c.description} crumbs={crumbs} schema={schema} solidHeader footerGap>
+  <PageHero title={c.h1} lede={c.lede} crumbs={crumbs} image={s.image} alt={s.imageAlt} focus={c.focus} />
+
+  <section class="limiter block--top block--bottom">
+    <div class="grid12 content">
+      <div class="content__main prose" data-reveal>
+        <h2>{c.heading}</h2>
+        {c.intro.map((p, i) => <p class={i === 0 ? 'lede' : undefined} set:html={p} />)}
+        <p class="action"><Button variant="solid" href={quote}>Request this service</Button></p>
+      </div>
+      <aside class="content__aside">
+        <div class="facts">
+          <h2>At a glance</h2>
+          <ul class="dash">{c.glance.map((g) => <li>{g}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="panel panel--tint limiter">
+    <div class="block--top block--bottom">
+      <h2 data-reveal>Scope of service</h2>
+      <div class="specs" data-reveal>
+        {
+          c.scope.map((g) => (
+            <div>
+              <h3>{g.title}</h3>
+              {g.text && <p>{g.text}</p>}
+              <ul class="dash">{g.items.map((item) => <li>{item}</li>)}</ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="limiter block--top">
+    <div>
+      <h2 data-reveal>Related products</h2>
+      <div class="cards">
+        {
+          related.map((p, i) => (
+            <div data-reveal style={`--i:${i % 3}`}>
+              <Card href={`/products/${p.slug}/`} title={p.name} image={p.image} alt={p.imageAlt} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="limiter block--top">
+    <div>
+      <h2 data-reveal>Industries</h2>
+      <ul class="rows" data-reveal>
+        {
+          industries.map((r) => (
+            <li class="row">
+              <h3 class="row__title">
+                <a href={`/applications/${r.slug}/`}>{r.name}</a>
+              </h3>
+              <p>{r.teaser}</p>
+              <span class="round-btn" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8.5 7H17v8.5" /></svg>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="limiter block--top block--bottom">
+    <div class="grid12 content">
+      <div class="content__main" data-reveal>
+        <h2>Frequently asked questions</h2>
+        <div class="accordion">
+          {
+            c.faq.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <div class="accordion__body">
+                  <p>{f.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBar
+    title="Need technical support or service assistance?"
+    text="Whether you need refurbished components, on-site installation, spare parts sourcing or logistics coordination, our specialists are ready to help."
+    href={quote}
+  />
+
+  <section class="limiter block--top">
+    <div>
+      <h2 data-reveal>Other services</h2>
+      <ul class="rows" data-reveal>
+        {
+          others.map((r) => (
+            <li class="row">
+              <h3 class="row__title">
+                <a href={`/services/${r.slug}/`}>{r.name}</a>
+              </h3>
+              <p>{r.teaser}</p>
+              <span class="round-btn" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8.5 7H17v8.5" /></svg>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .action {
+    margin-top: 2.4rem;
+  }
+</style>

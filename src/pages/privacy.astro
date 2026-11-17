@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+
+const crumbs = [{ name: 'Privacy policy', href: '/privacy/' }];
+const mail = `mailto:${site.email}`;
+---
+
+<Base
+  title="Privacy Policy"
+  description="Privacy policy for the TORQRON website: no cookies, analytics or tracking. How server logs and enquiries by e-mail are handled, and your rights."
+  crumbs={crumbs}
+  solidHeader
+  footerGap
+>
+  <PageHero title="Privacy policy" lede="How this website handles personal data." crumbs={crumbs} />
+
+  <section class="limiter block block--bottom">
+    <div>
+      <div class="prose measure">
+        <h2>Controller</h2>
+        <p>
+          {site.legalName}<br />
+          {
+            site.address.map((line) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))
+          }
+          {
+            site.licence && (
+              <>
+                Licence number: {site.licence}
+                <br />
+              </>
+            )
+          }
+          E-mail: <a href={mail}>{site.email}</a>
+        </p>
+
+        <h2>This website at a glance</h2>
+        <ul>
+          <li>This is a static website without user accounts.</li>
+          <li>It sets no cookies.</li>
+          <li>It uses no analytics, no tracking pixels and no third-party embeds such as maps, videos or social media plugins.</li>
+          <li>Fonts are hosted together with the website. Your browser does not connect to any font provider or other third-party server.</li>
+        </ul>
+
+        <h2>Server log data</h2>
+        <p>
+          When you open a page, your browser automatically transmits technical data. Our hosting provider processes this data to deliver the website: your IP address, the date and
+          time of the request, the requested URL and the user agent (browser type and operating system).
+        </p>
+
+        <h2>Enquiries by e-mail</h2>
+        <p>
+          This website has no contact form. When you contact us by e-mail, we receive the data you send, such as your name, company, e-mail address, part details and attachments.
+          We use this data only to handle your enquiry.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          You have the right to access the personal data we hold about you and to have it rectified or erased. To exercise these rights, write to <a href={mail}>{site.email}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>

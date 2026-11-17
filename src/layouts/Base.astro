@@ -1,0 +1,132 @@
+---
+import '@fontsource-variable/onest/wght.css';
+import '../styles/global.css';
+import onestLatin from '@fontsource-variable/onest/files/onest-latin-wght-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Crumb {
+  name: string;
+  href: string;
+}
+interface Props {
+  /** <title>; the brand is appended automatically unless it is already part of the title */
+  title: string;
+  /** meta description, 140–160 characters */
+  description: string;
+  /** breadcrumb trail after "Home", used for BreadcrumbList structured data */
+  crumbs?: Crumb[];
+  /** extra JSON-LD objects for this page (Product, Service, FAQPage …) */
+  schema?: Record<string, unknown>[];
+  /** social preview image, path below /public */
+  image?: string;
+  /** header starts blue-on-white (pages without a dark hero) */
+  solidHeader?: boolean;
+  /** add space above the footer when the last section has no rounded edge of its own */
+  footerGap?: boolean;
+  noindex?: boolean;
+}
+
+const { title, description, crumbs = [], schema = [], image = '/og.jpg', solidHeader = false, footerGap = false, noindex = false } = Astro.props;
+const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const abs = (path: string) => new URL(path, site.url).href;
+
+const org = {
+  '@type': 'Organization',
+  '@id': `${site.url}/#organization`,
+  name: site.name,
+  legalName: site.legalName,
+  url: site.url,
+  logo: abs('/brand/torqron-logo.png'),
+  email: site.email,
+  slogan: site.tagline,
+  description:
+    'Supplier of pelletizer die plates and knives, extruder components, polymer additives, filtration, sealing technology and industrial spare parts for petrochemical and plastics plants.',
+  areaServed: site.regions,
+  ...(site.phone && { telephone: site.phone }),
+};
+const graph: Record<string, unknown>[] = [
+  org,
+  { '@type': 'WebSite', '@id': `${site.url}/#website`, url: site.url, name: site.name, publisher: { '@id': org['@id'] }, inLanguage: 'en' },
+  {
+    '@type': 'WebPage',
+    '@id': `${canonical}#webpage`,
+    url: canonical,
+    name: fullTitle,
+    description,
+    isPartOf: { '@id': `${site.url}/#website` },
+    about: { '@id': org['@id'] },
+    inLanguage: 'en',
+  },
+  ...(crumbs.length
+    ? [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: c.name,
+            item: abs(c.href),
+          })),
+        },
+      ]
+    : []),
+  ...schema,
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#0a1c38" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={onestLatin} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={abs(image)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+    <slot name="head" />
+    <script is:inline>
+      // .js arms the scroll reveals; .is-loading shows the loading screen on the first page of a visit
+      (function (d) {
+        if ('IntersectionObserver' in window) d.classList.add('js');
+        try {
+          if (!sessionStorage.getItem('tq-seen') && !matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('is-loading');
+        } catch (e) {}
+      })(document.documentElement);
+    </script>
+  </head>
+  <body>
+    <div class="loader" aria-hidden="true">
+      <img class="loader__logo" src="/brand/torqron-logo.png" alt="" width="1110" height="112" />
+      <span class="loader__bar"></span>
+    </div>
+    <Header solid={solidHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer gap={footerGap} />
+    <script>
+      import '../scripts/ui.js';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Tile from '../../components/Tile.astro';
+import CtaBar from '../../components/CtaBar.astro';
+import { services, site } from '../../data/site';
+
+const crumbs = [{ name: 'Services', href: '/services/' }];
+const reasons = [
+  'Fast execution on dependable delivery schedules',
+  'OEM-grade quality standards',
+  'European refurbishment standards',
+  '20+ years of technical expertise',
+  'Deep understanding of petrochemical environments',
+  'Reliable support across 12 countries',
+];
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'TORQRON services',
+    itemListElement: services.map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: s.name, url: `${site.url}/services/${s.slug}/` })),
+  },
+];
+---
+
+<Base
+  title="Services for Petrochemical & Polymer Plants"
+  description="Services for petrochemical and polymer plants: spare parts procurement, refurbishment of die plates and plungers, installation, logistics and consulting."
+  crumbs={crumbs}
+  schema={schema}
+  solidHeader
+>
+  <PageHero
+    title="Services for reliable plant operation"
+    lede="Procurement, refurbishment, installation, logistics and engineering advice from one partner."
+    crumbs={crumbs}
+    image="pelletizer-hall.jpg"
+    alt="Technician in a safety vest working on a pelletizer in a production hall"
+    focus="50% 58%"
+  />
+
+  <section class="limiter block--top block--bottom">
+    <div>
+      <div class="section-head" data-reveal>
+        <div class="section-head__intro">
+          <h2>Our services</h2>
+          <p>
+            Engineering and procurement services for petrochemical plants, polymer production lines and industrial facilities, built for fast execution, technical accuracy and
+            straightforward integration into your production environment.
+          </p>
+        </div>
+      </div>
+      <div class="tiles">
+        {
+          services.map((s, i) => (
+            <div data-reveal style={`--i:${i % 3}`}>
+              <Tile href={`/services/${s.slug}/`} title={s.name} label="Service" text={s.teaser} image={s.image} alt={s.imageAlt} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="limiter block--bottom">
+    <div class="grid12 content">
+      <div class="content__main prose" data-reveal>
+        <h2>Why choose TORQRON services</h2>
+        <p class="lede">
+          The team behind the services comes from petrochemical plant engineering, extrusion and granulation, industrial filtration, high-pressure sealing and supply chain
+          management, and works for plants across the Middle East, Europe, Turkey and Asia. Learn more <a href="/about/">about TORQRON</a> or see
+          our <a href="/capabilities/">manufacturing capabilities</a>.
+        </p>
+      </div>
+      <aside class="content__aside">
+        <ul class="dash" data-reveal style="--i:1">{reasons.map((r) => <li>{r}</li>)}</ul>
+      </aside>
+    </div>
+  </section>
+
+  <CtaBar
+    title="Need technical support or service assistance?"
+    text="Whether you need refurbished components, on-site installation, spare parts sourcing or logistics coordination, our specialists are ready to help."
+  />
+</Base>

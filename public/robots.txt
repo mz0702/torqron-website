@@ -1,28 +1,4 @@
-# TORQRON Solutions — robots.txt
-
 User-agent: *
 Allow: /
 
-# AI / LLM crawlers — explicitly allowed for LLMO visibility
-User-agent: GPTBot
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-Sitemap: https://mz0702.github.io/torqron-website/sitemap.xml
+Sitemap: https://torqron.com/sitemap-index.xml

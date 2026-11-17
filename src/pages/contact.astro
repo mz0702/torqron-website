@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import { site } from '../data/site';
+
+const crumbs = [{ name: 'Contact', href: '/contact/' }];
+
+const helps = ['Part number', 'OEM reference', 'Drawing or sketch', 'Material specification', 'Application description', 'Photo of the part or its nameplate'];
+
+const steps = [
+  {
+    title: 'Send what you have',
+    text: 'E-mail us the part number, OEM reference, drawing or a photo, and attach any documents directly.',
+  },
+  {
+    title: 'We identify and source it',
+    text: 'Our technical procurement team identifies the item, selects the supplier and manages documentation and quality control.',
+  },
+  {
+    title: 'Delivered on schedule',
+    text: 'Global logistics coordination with full documentation and compliance support, wherever your plant is.',
+  },
+];
+
+const schema = [
+  { '@type': 'ContactPage', '@id': `${site.url}/contact/#webpage`, mainEntity: { '@id': `${site.url}/#organization` } },
+  {
+    '@id': `${site.url}/#organization`,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: site.email,
+      areaServed: site.regions,
+      ...(site.phone && { telephone: site.phone }),
+    },
+  },
+];
+---
+
+<Base
+  title="Request a Quote for Industrial Spare Parts"
+  description="Request a quote from TORQRON for pelletizer die plates, extruder components, additives and spare parts. E-mail a part number, OEM reference, drawing or photo."
+  crumbs={crumbs}
+  schema={schema}
+  solidHeader
+>
+  <PageHero title="Request a quote" lede="Send us a part number, an OEM reference, a drawing or simply a photo." crumbs={crumbs} />
+
+  <section class="limiter block block--bottom">
+    <div class="grid12 contact">
+      <div class="contact__main">
+        <p class="kicker" data-topic-line hidden>Your request: <span data-topic></span></p>
+        <h2 class="contact__mail"><a href={`mailto:${site.email}`} data-mail>{site.email}</a></h2>
+        <p class="lede measure">
+          Write to our technical procurement team. Drawings, specifications and photos can be attached directly to your e-mail.
+        </p>
+        <div class="cta__actions">
+          <Button variant="solid" icon="mail" href={`mailto:${site.email}`} data-mail>Write an e-mail</Button>
+          {
+            site.phone && (
+              <Button icon="phone" href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>
+                {site.phone}
+              </Button>
+            )
+          }
+        </div>
+        {
+          site.address.length > 0 && (
+            <address class="contact__address">
+              {[site.legalName, ...site.address].map((line) => (
+                <>
+                  {line}
+                  <br />
+                </>
+              ))}
+            </address>
+          )
+        }
+      </div>
+      <aside class="contact__aside">
+        <div class="facts facts--inline">
+          <h2>What helps us identify your part</h2>
+          <ul class="dash">
+            {helps.map((h) => <li>{h}</li>)}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="panel panel--tint limiter">
+    <div class="closing">
+      <div class="closing__head">
+        <h2 data-reveal="mask">From request to delivery</h2>
+      </div>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step" data-reveal="rule" style={`--i:${i}`}>
+              <span class="step__no" aria-hidden="true" />
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Links such as /contact/?topic=Sealing%20technology put the topic into the e-mail subject.
+  const topic = new URLSearchParams(location.search).get('topic')?.trim().slice(0, 80);
+  if (topic) {
+    document.querySelectorAll<HTMLAnchorElement>('a[data-mail]').forEach((a) => (a.href += `?subject=${encodeURIComponent(`Request: ${topic}`)}`));
+    const line = document.querySelector<HTMLElement>('[data-topic-line]');
+    if (line) {
+      line.querySelector('[data-topic]')!.textContent = topic;
+      line.hidden = false;
+    }
+  }
+</script>
+
+<style>
+  .contact {
+    align-items: start;
+    row-gap: 3rem;
+    padding-top: 1rem;
+  }
+
+  .contact__main {
+    grid-column: 1 / span 7;
+  }
+
+  .contact__mail {
+    margin: 0 0 1.6rem;
+    overflow-wrap: anywhere;
+  }
+
+  .contact__mail a {
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.12em;
+  }
+
+  .contact__main .lede {
+    margin-bottom: 2rem;
+  }
+
+  .contact__address {
+    margin-top: 2.4rem;
+    font-style: normal;
+    font-weight: 300;
+  }
+
+  .contact__aside {
+    grid-column: 9 / span 4;
+  }
+
+  @media (max-width: 1100px) {
+    .contact__main,
+    .contact__aside {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

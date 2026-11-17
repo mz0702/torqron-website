@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Card from '../../components/Card.astro';
+import CtaBar from '../../components/CtaBar.astro';
+import { applications, site } from '../../data/site';
+
+const crumbs = [{ name: 'Applications', href: '/applications/' }];
+const inputs = ['OEM reference numbers', 'Drawings or technical specifications', 'Material requirements', 'Application description', 'Photos or sample documentation'];
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'Industries served by TORQRON',
+    itemListElement: applications.map((a, i) => ({ '@type': 'ListItem', position: i + 1, name: a.name, url: `${site.url}/applications/${a.slug}/` })),
+  },
+];
+---
+
+<Base
+  title="Industrial Applications & Industries Served"
+  description="Industrial applications of TORQRON parts and services: petrochemical, plastics and polymer, machinery, chemical, bulk handling and packaging operations."
+  crumbs={crumbs}
+  schema={schema}
+  solidHeader
+>
+  <PageHero
+    title="Applications across the petrochemical value chain"
+    lede="Parts and services for six industries, from polymer production to packaging."
+    crumbs={crumbs}
+    image="plant-tower.jpg"
+    alt="Distillation column and pipe racks of a petrochemical plant seen from below"
+    focus="50% 35%"
+  />
+
+  <section class="limiter block--top block--bottom">
+    <div>
+      <div class="section-head" data-reveal>
+        <div class="section-head__intro">
+          <h2>Industries we serve</h2>
+          <p>
+            TORQRON supports petrochemical plants, polymer manufacturing lines, machinery builders, chemical producers, packaging operations and the bulk handling between them,
+            with components, additives, spare parts and engineering services.
+          </p>
+        </div>
+      </div>
+      <div class="cards">
+        {
+          applications.map((a, i) => (
+            <div data-reveal style={`--i:${i % 3}`}>
+              <Card href={`/applications/${a.slug}/`} title={a.name} image={a.image} alt={a.imageAlt} teaser={a.teaser} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="limiter block--bottom">
+    <div class="grid12 content">
+      <div class="content__main prose" data-reveal>
+        <h2>Not sure which components your application requires?</h2>
+        <p class="lede">
+          Our engineering and procurement specialists identify the right parts from the information you have, then source and deliver them. For advice on materials and
+          compatibility, see <a href="/services/technical-consulting/">technical consulting</a>; for sourcing, <a href="/services/spare-parts-procurement/">spare parts procurement</a>.
+        </p>
+      </div>
+      <aside class="content__aside">
+        <div class="facts facts--inline" data-reveal style="--i:1">
+          <h2>What you can send us</h2>
+          <ul class="dash">{inputs.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <CtaBar
+    title="Tell us about your application."
+    text="Send an OEM reference, a drawing, a specification or a photo, and our team identifies and sources the components you need."
+  />
+</Base>

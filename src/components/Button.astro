@@ -1,0 +1,40 @@
+---
+// Pill button with an arrow disc. `variant`: outline (default) | solid. `tone`: blue (default) | white.
+interface Props {
+  href?: string;
+  variant?: 'outline' | 'solid';
+  tone?: 'blue' | 'white';
+  icon?: 'arrow' | 'mail' | 'phone' | 'download' | 'send';
+  /** render a non-interactive pill (inside a card that is already one link) */
+  as?: 'span';
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'outline', tone = 'blue', icon = 'arrow', as, class: cls = '', ...rest } = Astro.props;
+const Tag = href ? 'a' : (as ?? 'button');
+const classes = ['btn', variant === 'solid' && 'btn--solid', tone === 'white' && 'btn--white', cls].filter(Boolean).join(' ');
+---
+
+<Tag class={classes} href={href} {...rest}>
+  <span class="btn__inner">
+    <span><slot /></span>
+    <span class="btn__disc" data-icon={icon} aria-hidden="true">
+      {icon === 'arrow' && (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8.5 7H17v8.5" /></svg>
+      )}
+      {icon === 'mail' && (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="12" rx="2" /><path d="m4 7.5 8 6 8-6" /></svg>
+      )}
+      {icon === 'phone' && (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h3l1.5 4-2 1.2a11 11 0 0 0 5.8 5.8L16 13l4 1.5v3a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 4.5 6.2 2 2 0 0 1 6.5 4Z" /></svg>
+      )}
+      {icon === 'download' && (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19.5h14" /></svg>
+      )}
+      {icon === 'send' && (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4 10.5 13.5M20 4l-6 16-3.5-6.5L4 10l16-6Z" /></svg>
+      )}
+    </span>
+  </span>
+</Tag>
+

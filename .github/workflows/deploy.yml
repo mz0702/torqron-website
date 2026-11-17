@@ -1,3 +1,5 @@
+# Builds the site and publishes it to GitHub Pages under https://<owner>.github.io/<repo>/
+# on every push to main (or by hand under Actions → Deploy to GitHub Pages → Run workflow).
 name: Deploy to GitHub Pages
 
 on:
@@ -18,27 +20,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build static export
-        run: npm run build
-        env:
-          NEXT_PUBLIC_BASE_PATH: /torqron-website
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - run: npm ci
+      - run: npm run build
+      # the source links from the domain root; the Pages copy lives in /<repo>/ and must not be indexed
+      - run: node scripts/rebase.mjs dist "/${{ github.event.repository.name }}" --noindex
+      - uses: actions/upload-pages-artifact@v5
         with:
-          path: ./out
+          path: dist
 
   deploy:
     needs: build
@@ -47,6 +40,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - id: deployment
+        uses: actions/deploy-pages@v5

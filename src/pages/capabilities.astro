@@ -1,0 +1,244 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import CtaBar from '../components/CtaBar.astro';
+import { products, services, site } from '../data/site';
+
+const crumbs = [{ name: 'Capabilities', href: '/capabilities/' }];
+
+// Verbatim from the machine list PDF (_source/machine-list.md).
+const groups = [
+  {
+    id: 'milling',
+    title: 'Milling',
+    intro: '5-axis, vertical, horizontal and 4-axis machining centers.',
+    machines: [
+      {
+        name: 'Lid Maho DMU 125 P',
+        data: ['5-axis machining center', 'Travel paths: x: 1,250 mm / y: 850 mm / z: 800 mm', 'Tool changer: 60-fold', '5 axes simultaneous'],
+      },
+      {
+        name: 'DMG Mori DMU 80 P duoBlock',
+        data: ['5-axis machining center', 'Travel paths: x: 800 mm / y: 1,050 mm / z: 800 mm', 'Tool changer: 120-fold', '5 axes simultaneous'],
+      },
+      {
+        name: 'Quaser UX 500 C',
+        data: [
+          '5-axis machining center',
+          'Travel paths: x: 712 mm / y: 508 mm / z: 515 mm',
+          'Tool changer: 60-fold',
+          '5 axes simultaneous',
+          'incl. loading and unloading robot Robojob',
+        ],
+      },
+      {
+        name: 'Spinner, Type MVC 610',
+        data: ['Vertical machining center', 'Travel paths: x: 610 mm / y: 580 mm / z: 560 mm', 'Tool changer: 24-fold', 'ICS: 20 bar'],
+      },
+      {
+        name: 'Spinner, Type VC 750 XL',
+        data: ['Vertical machining center', 'Travel paths: x: 950 mm / y: 460 mm / z: 460 mm', 'Tool changer: 32-fold', 'ICS: 40 bar'],
+      },
+      {
+        name: 'Spinner, Type MVC 1100',
+        data: ['Vertical machining center', 'Travel paths: x: 1100 mm / y: 610 mm / z: 610 mm', 'Tool changer: 32-fold', 'ICS: 40 bar'],
+      },
+      {
+        name: 'Mori Seiki NH 4000 DCG',
+        data: ['Horizontal machining center with pallet changer', 'Travel paths: x: 560 mm / y: 560 mm / z: 630 mm', 'Tool changer: 120-fold', 'ICS: 70 bar'],
+      },
+      {
+        name: 'Fanuc Robodrill a-T21iEL',
+        data: ['4-axis machining center', 'Travel paths: x: 700 mm / y: 400 mm / z: 330 mm', 'Tool changer: 22-fold', '3 + 1 axes'],
+      },
+    ],
+  },
+  {
+    id: 'turning',
+    title: 'Turning',
+    intro: 'CNC lathes, a turning-milling center and a vertical lathe for large diameters.',
+    machines: [
+      {
+        name: 'Okuma Multus B 400 W 1500',
+        data: ['CNC turning-milling center', 'Spindle and counter spindle', '7 axes', 'max. turning diameter: 710 mm', '40 tools'],
+      },
+      {
+        name: 'Okuma LU 400',
+        data: [
+          'CNC lathe',
+          'max. turning diameter: 400 mm',
+          'max. turning length: 750 mm',
+          '2-fold tool turret with driven tools',
+          'incl. loading and unloading robot Robojob',
+        ],
+      },
+      {
+        name: 'Okuma LU 300',
+        data: ['CNC lathe', 'max. turning diameter: 300 mm', 'max. turning length: 500 mm', '2-fold tool turret with driven tools'],
+      },
+      {
+        name: 'Okuma LB 3000',
+        data: ['CNC lathe', 'max. turning diameter: 340 mm', 'max. turning length: 1000 mm', '12 driven tool stations'],
+      },
+      {
+        name: 'Pittler, Type PV1000/1-1',
+        data: ['CNC vertical lathe', 'max. turning diameter: 1,100 mm', 'max. turning length: 600 mm'],
+      },
+      {
+        name: 'Mori Seiki SL 25 M',
+        data: ['CNC lathe', 'max. turning diameter: 250 mm', 'max. turning length: 500 mm', '12-fold tool turret, of which 6 are driven tools'],
+      },
+      {
+        name: 'Emco, Type Emcoturn 140',
+        data: ['Quantity: 3', 'CNC lathe', 'max. turning diameter: 150 mm', 'max. turning length: 400 mm', '8-fold tool turret'],
+      },
+      {
+        name: 'DF Böhringer, Type V5',
+        data: ['max. turning diameter: 680 mm', 'max. turning length: 1500 mm'],
+      },
+    ],
+  },
+  {
+    id: 'measuring',
+    title: 'Measuring',
+    intro: 'Two 3D coordinate measuring machines.',
+    machines: [
+      {
+        name: '3D coordinate measuring machine, Wenzel LH 10-12-8',
+        data: ['with rotary swivel head and probe changer', 'Measuring range: x: 1,000 mm / y: 1,200 mm / z: 800 mm', 'Accuracy MPE = from 1.4 μm + L/350 (L in mm)'],
+      },
+      {
+        name: '3D coordinate measuring machine, Wenzel CMM',
+        data: ['Measuring range: x: 500 mm / y: 450 mm / z: 400 mm', 'Accuracy MPE = from 3.5 + L/300 μm'],
+      },
+    ],
+  },
+];
+
+const further = ['Bandsaw automatic, cutting range max. 400 mm', 'Welding system MIG / MAG incl. rotary table', 'Thread cutting devices'];
+
+// Headline figures, read directly from the list above.
+const glance = [
+  '5-axis simultaneous milling on three machining centers',
+  'Largest machining center: 1,250 × 850 × 800 mm travel',
+  'Tool changers up to 120-fold',
+  'Turning up to Ø 1,100 mm and up to 1,500 mm length',
+  '7-axis turning-milling with counter spindle',
+  '3D coordinate measuring up to 1,000 × 1,200 × 800 mm',
+  'Robot loading and unloading (Robojob) on two machines',
+];
+
+const bySlug = <T extends { slug: string }>(list: T[], slug: string) => list.find((x) => x.slug === slug)!;
+const related = [
+  { ...bySlug(products, 'granulation-tools'), href: '/products/granulation-tools/' },
+  { ...bySlug(products, 'extrusion-components'), href: '/products/extrusion-components/' },
+  { ...bySlug(services, 'reconditioning-refurbishment'), href: '/services/reconditioning-refurbishment/' },
+];
+---
+
+<Base
+  title="5-Axis CNC Machining Capabilities & Machine List"
+  description="TORQRON machine list: 5-axis machining centers up to 1,250 mm travel, CNC lathes up to Ø 1,100 mm and 3D coordinate measuring for extruder and pelletizer parts."
+  crumbs={crumbs}
+  solidHeader
+>
+  <PageHero
+    title="Manufacturing capabilities and machine list"
+    lede="5-axis machining centers, CNC lathes up to Ø 1,100 mm and 3D coordinate measuring: our complete equipment list."
+    crumbs={crumbs}
+    image="cnc-machining.jpg"
+    alt="CNC milling cutter machining a steel workpiece under cutting fluid"
+  />
+
+  <section class="limiter block block--bottom">
+    <div class="content grid12">
+      <div class="content__main prose">
+        <p class="lede" data-reveal>
+          TORQRON supplies precision-machined components for extrusion and granulation lines: <a href="/products/granulation-tools/">pelletizer die plates</a> manufactured to precise
+          tolerances, <a href="/products/extrusion-components/">extruder screw elements</a> made to OEM part numbers and screw shafts in 1.2343 ESU tool steel. We also <a href="/services/reconditioning-refurbishment/">recondition high-value parts</a>,
+          from die plates up to 1,200 mm to LDPE hyper compressor plungers.
+        </p>
+        <p data-reveal>
+          The machine list below sets out our equipment: 5-axis and vertical machining centers, CNC turning and turning-milling, 3D coordinate measuring and supporting workshop
+          equipment. Simultaneous 5-axis machining reaches inclined faces and complex contours in a single setup, and a coordinate measuring machine verifies dimensions and
+          positions against the drawing. The same list is available as a <a href={site.machineListPdf}>PDF download</a>.
+        </p>
+
+        {
+          groups.map((g) => (
+            <>
+              <h2 id={g.id} data-reveal>
+                {g.title}
+              </h2>
+              <p data-reveal>{g.intro}</p>
+              <div class="specs" data-reveal>
+                {g.machines.map((m) => (
+                  <div>
+                    <h3>{m.name}</h3>
+                    <ul class="dash">
+                      {m.data.map((d) => (
+                        <li>{d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </>
+          ))
+        }
+
+        <h2 id="further" data-reveal>Further equipment</h2>
+        <ul data-reveal>
+          {further.map((f) => <li>{f}</li>)}
+        </ul>
+      </div>
+
+      <aside class="content__aside">
+        <div class="facts" data-reveal>
+          <h2>At a glance</h2>
+          <ul class="dash">
+            {glance.map((g) => <li>{g}</li>)}
+          </ul>
+          <p class="download">
+            <Button icon="download" href={site.machineListPdf}>Machine list (PDF)</Button>
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="limiter block block--bottom">
+    <div>
+      <h2 data-reveal>Related products and services</h2>
+      <ul class="rows" data-reveal>
+        {
+          related.map((r) => (
+            <li class="row">
+              <h3 class="row__title">
+                <a href={r.href}>{r.name}</a>
+              </h3>
+              <p>{r.teaser}</p>
+              <span class="round-btn" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7M8.5 7H17v8.5" />
+                </svg>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBar
+    title="Send us your drawing."
+    text="Our technical procurement team works from a drawing, a part number, an OEM reference, a material specification or even a photo."
+  />
+</Base>
+
+<style>
+  .download {
+    margin-top: 2rem;
+  }
+</style>

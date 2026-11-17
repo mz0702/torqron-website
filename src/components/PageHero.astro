@@ -1,0 +1,57 @@
+---
+// Subpage hero: title and breadcrumbs on white, then a full-width figure with a rounded bottom
+// (a photo, or no figure at all).
+// Pages using it must pass `solidHeader` to <Base>.
+import { Image } from 'astro:assets';
+import { img } from '../data/images';
+interface Crumb {
+  name: string;
+  href: string;
+}
+interface Props {
+  title: string;
+  lede?: string;
+  /** trail after "Home"; the last entry is the current page */
+  crumbs: Crumb[];
+  /** file name in src/assets/img */
+  image?: string;
+  alt?: string;
+  /** CSS object-position for the photo, e.g. "50% 30%" */
+  focus?: string;
+}
+const { title, lede, crumbs, image, alt = '', focus = '50% 50%' } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="limiter">
+    <div class="page-hero__head">
+      <div class="page-hero__intro">
+        <h1 class="page-hero__title">{title}</h1>
+        {lede && <p class="page-hero__lede">{lede}</p>}
+      </div>
+      <nav aria-label="Breadcrumb">
+        <ol class="crumbs">
+          <li><a href="/">Home</a></li>
+          {
+            crumbs.map((c, i) =>
+              i === crumbs.length - 1 ? (
+                <li aria-current="page">{c.name}</li>
+              ) : (
+                <li>
+                  <a href={c.href}>{c.name}</a>
+                </li>
+              ),
+            )
+          }
+        </ol>
+      </nav>
+    </div>
+  </div>
+  {
+    image && (
+      <figure class="page-hero__figure page-hero__figure--tinted">
+        <Image src={img(image)} alt={alt} widths={[800, 1280, 1920]} sizes="100vw" quality={70} loading="eager" fetchpriority="high" style={`object-position:${focus}`} />
+      </figure>
+    )
+  }
+</section>

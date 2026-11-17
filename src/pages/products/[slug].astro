@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import TeaserRail from '../../components/TeaserRail.astro';
+import CtaBar from '../../components/CtaBar.astro';
+import { img } from '../../data/images';
+import { products, applications, services } from '../../data/site';
+import { productContent } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map((product) => {
+    const content = productContent[product.slug];
+    if (!content) throw new Error(`No content in src/data/products.ts for product "${product.slug}"`);
+    return { params: { slug: product.slug }, props: { product, content } };
+  });
+}
+
+const { product, content: c } = Astro.props;
+
+const byslug = <T extends { slug: string }>(list: T[], slug: string) => {
+  const hit = list.find((x) => x.slug === slug);
+  if (!hit) throw new Error(`Unknown slug "${slug}" on /products/${product.slug}/`);
+  return hit;
+};
+const related = [
+  { title: 'Where it is used', base: '/applications/', items: c.applications.map((l) => ({ ...l, name: byslug(applications, l.slug).name })) },
+  { title: 'Related services', base: '/services/', items: c.services.map((l) => ({ ...l, name: byslug(services, l.slug).name })) },
+];
+const quote = `/contact/?topic=${encodeURIComponent(c.topic)}`;
+const crumbs = [
+  { name: 'Products', href: '/products/' },
+  { name: product.name, href: `/products/${product.slug}/` },
+];
+const schema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<Base title={c.title} description={c.description} crumbs={crumbs} schema={schema} solidHeader footerGap>
+  <PageHero title={c.h1} lede={c.lede} crumbs={crumbs} image={product.image} alt={product.imageAlt} />
+
+  <section class="limiter block--top block--bottom">
+    <div class="grid12 content">
+      <div class="content__main prose" data-reveal>
+        <h2>{c.benefit}</h2>
+        {c.intro.map((p, i) => <p class={i === 0 ? 'lede' : undefined} set:html={p} />)}
+        <p class="action"><Button variant="solid" href={quote}>{c.cta}</Button></p>
+      </div>
+      <aside class="content__aside">
+        <div class="facts">
+          <h2>Key facts</h2>
+          <ul class="dash">{c.facts.map((f) => <li>{f}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="panel panel--tint limiter">
+    <div class="block--top block--bottom">
+      <h2 data-reveal>Range and specifications</h2>
+      <div class="specs" data-reveal>
+        {
+          c.specs.map((g) => (
+            <div>
+              <h3>{g.title}</h3>
+              <ul class="dash">{g.items.map((item) => <li>{item}</li>)}</ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    // ponytail: skip the figure when the hero already shows the same photo
+    c.photo && c.photo.src !== product.image && (
+      <section class="limiter block--top">
+        <div class="grid12 content">
+          <figure class="content__main" data-reveal>
+            {c.photo.src.endsWith('.png') ? (
+              <div class="stage">
+                <Image src={img(c.photo.src)} alt={c.photo.alt} widths={[640, 960, 1280]} sizes="(max-width: 840px) 92vw, 60vw" quality={80} loading="eager" />
+              </div>
+            ) : (
+              <Image class="figure-round" src={img(c.photo.src)} alt={c.photo.alt} widths={[640, 960, 1440]} sizes="(max-width: 840px) 92vw, 60vw" quality={72} loading="eager" />
+            )}
+          </figure>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    related.map((r) => (
+      <section class="limiter block--top">
+        <div>
+          <h2 data-reveal>{r.title}</h2>
+          <ul class="rows" data-reveal>
+            {r.items.map((l) => (
+              <li class="row">
+                <h3 class="row__title">
+                  <a href={`${r.base}${l.slug}/`}>{l.name}</a>
+                </h3>
+                <p>{l.text}</p>
+                <span class="round-btn" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8.5 7H17v8.5" /></svg>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="limiter block--top block--bottom">
+    <div class="grid12 content">
+      <div class="content__main" data-reveal>
+        <h2>Frequently asked questions</h2>
+        <div class="accordion">
+          {
+            c.faq.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <div class="accordion__body">
+                  <p>{f.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBar
+    title={c.ctaTitle}
+    text="Our technical procurement team identifies any item from a part number, OEM reference, drawing, material specification, application description or a photo."
+    href={quote}
+  />
+
+  <TeaserRail title="More products" level="h2" class="block--top">
+    <p slot="intro">Other product groups from TORQRON, or back to the <a href="/products/">product overview</a>.</p>
+    {products.filter((p) => p.slug !== product.slug).map((p) => <Card href={`/products/${p.slug}/`} title={p.name} image={p.image} alt={p.imageAlt} />)}
+  </TeaserRail>
+</Base>
+
+<style>
+  figure {
+    margin: 0;
+  }
+  .action {
+    margin-top: 2.4rem;
+  }
+</style>

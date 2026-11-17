@@ -1,0 +1,28 @@
+---
+// Tinted call-to-action bar: big title left, text and buttons right.
+import Button from './Button.astro';
+import { site } from '../data/site';
+interface Props {
+  title: string;
+  text?: string;
+  cta?: string;
+  href?: string;
+  /** show the e-mail pill next to the main button */
+  mail?: boolean;
+}
+const { title, text, cta = 'Request a quote', href = '/contact/', mail = true } = Astro.props;
+---
+
+<section class="panel panel--tint limiter">
+  <div class="cta grid12">
+    <h2 class="cta__title" data-reveal>{title}</h2>
+    <div class="cta__content" data-reveal style="--i:1">
+      {text && <p>{text}</p>}
+      <slot />
+      <div class="cta__actions">
+        <Button variant="solid" href={href}>{cta}</Button>
+        {mail && <Button icon="mail" href={`mailto:${site.email}`}>{site.email}</Button>}
+      </div>
+    </div>
+  </div>
+</section>

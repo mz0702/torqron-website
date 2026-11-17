@@ -1,0 +1,95 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import CtaBar from '../../components/CtaBar.astro';
+import { products, site } from '../../data/site';
+
+const crumbs = [{ name: 'Products', href: '/products/' }];
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'TORQRON products',
+    itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: `${site.url}/products/${p.slug}/` })),
+  },
+];
+const inputs = ['Part number', 'OEM reference', 'Drawing', 'Material specification', 'Application description', 'Photo'];
+---
+
+<Base
+  title="Products for Petrochemical and Plastics Plants"
+  description="Products for petrochemical and plastics plants: pelletizer die plates and knives, extruder parts, heater plates, filters, additives, seals, valves and spares."
+  crumbs={crumbs}
+  schema={schema}
+  solidHeader
+>
+  <PageHero
+    title="Products for petrochemical and plastics production"
+    lede="Components, additives and spare parts for polymer reactors, extrusion lines and granulation units."
+    crumbs={crumbs}
+    image="screw-elements-studio.jpg"
+    alt="Twin-screw extruder elements and screw shafts on a dark reflective surface"
+    focus="50% 62%"
+  />
+
+  <section class="limiter block--top block--bottom">
+    <div>
+      <div class="section-head" data-reveal>
+        <div class="section-head__intro">
+          <h2>Product range</h2>
+          <p>
+            TORQRON supplies critical components, engineering tools and chemical additives for petrochemical and plastics production, from <a href="/products/granulation-tools/">pelletizer die plates and knives</a> and <a href="/products/extrusion-components/">twin-screw extruder parts</a> to <a href="/products/plastic-additives/">polymer additives</a> and <a href="/products/industrial-spare-parts/">plant spare parts</a>.
+          </p>
+        </div>
+      </div>
+      <div class="cards" data-reveal>
+        {products.map((p) => <Card href={`/products/${p.slug}/`} title={p.name} image={p.image} alt={p.imageAlt} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="panel panel--tint limiter">
+    <div class="grid12 content block--top block--bottom">
+      <div class="content__main prose" data-reveal>
+        <h2>Sourcing a part that is not listed</h2>
+        <p class="lede">
+          Our technical procurement team identifies any item from a part number, OEM reference, drawing, material specification, application description or even a photo, then sources and delivers it.
+        </p>
+        <p>
+          The <a href="/services/spare-parts-procurement/">spare parts procurement service</a> manages supplier selection, documentation, quality control and delivery logistics. Where the right part is not obvious, <a href="/services/technical-consulting/">technical consulting</a> covers material and part selection and compatibility checks.
+        </p>
+      </div>
+      <aside class="content__aside">
+        <div class="facts facts--inline" data-reveal style="--i:1">
+          <h3>What you can send us</h3>
+          <ul class="dash">{inputs.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="limiter block--top block--bottom">
+    <div class="section-head downloads" data-reveal>
+      <div class="section-head__intro">
+        <h2 class="h3">Machine list and capabilities</h2>
+        <p>Our machine list covers 5-axis machining centers, CNC lathes up to 1,100 mm turning diameter and 3D coordinate measuring machines.</p>
+      </div>
+      <div class="cta__actions">
+        <Button href={site.machineListPdf} icon="download">Machine list (PDF)</Button>
+        <Button href="/capabilities/">Manufacturing capabilities</Button>
+      </div>
+    </div>
+  </section>
+
+  <CtaBar
+    title="Send us a part number, a drawing or a photo."
+    text="Our technical procurement team identifies the item, then sources it and coordinates worldwide delivery."
+  />
+</Base>
+
+<style>
+  .downloads {
+    margin-bottom: 0;
+  }
+</style>

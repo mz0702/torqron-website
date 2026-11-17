@@ -1,0 +1,282 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import CtaBar from '../components/CtaBar.astro';
+import { img } from '../data/images';
+import { site } from '../data/site';
+
+const crumbs = [{ name: 'About', href: '/about/' }];
+
+const principles = [
+  'Precision over approximation',
+  'Fast delivery over lengthy procurement cycles',
+  'Transparent communication over uncertainty',
+  'Long-term partnerships over transactional sourcing',
+];
+
+const differences = [
+  { title: 'Speed you can count on', text: 'Lead times well below the market norm, optimized global logistics and fast response to urgent requests.' },
+  { title: 'OEM-grade quality', text: 'All parts are sourced or manufactured to strict specifications and undergo detailed quality control.' },
+  { title: 'Deep technical expertise', text: 'More than 20 years of experience across petrochemical, plastics, extrusion and industrial systems.' },
+  {
+    title: 'Global reach, local understanding',
+    text: 'Active in the Middle East, Europe, Turkey and Asia, with proven experience adapting to different regulatory and operational environments.',
+  },
+  { title: 'Integrated support', text: 'From spare parts procurement to refurbishment, installation, logistics consulting and on-site services.' },
+];
+
+const expertise = [
+  'Petrochemical plant engineering',
+  'Extrusion and granulation technology',
+  'Industrial filtration',
+  'High-pressure sealing systems',
+  'Supply chain and logistics management',
+];
+
+const quality = [
+  'Selected manufacturer partnerships',
+  'Material and process documentation',
+  'Technical inspection before dispatch',
+  'Compliance with international industrial standards',
+  'Traceability for critical components',
+  'Transparent communication from RFQ to delivery',
+];
+
+const figures = [
+  { value: '20+', label: 'Years of combined experience' },
+  { value: '12', label: 'Countries served' },
+  { value: '28+', label: 'Industrial facilities supported' },
+  { value: '99%+', label: 'On-time delivery' },
+];
+
+const values = [
+  { title: 'Reliability', text: 'We deliver what we promise, and we promise responsibly.' },
+  { title: 'Technical accuracy', text: 'Every component, specification and solution is matched with engineering precision.' },
+  { title: 'Responsiveness', text: 'Fast coordination, fast quotations, fast support.' },
+  { title: 'Long-term partnership', text: 'We measure success in years, not transactions.' },
+];
+
+const more = [
+  { href: '/products/', title: 'Products', text: 'Granulation tools, extruder components, additives, filtration, sealing, valves and plant spare parts.' },
+  { href: '/services/', title: 'Services', text: 'Spare parts procurement, reconditioning, installation, logistics and technical consulting.' },
+  { href: '/capabilities/', title: 'Manufacturing capabilities', text: '5-axis machining, CNC turning and 3D coordinate measuring: the full machine list.' },
+];
+
+const schema = [{ '@type': 'AboutPage', '@id': `${site.url}/about/#webpage`, mainEntity: { '@id': `${site.url}/#organization` } }];
+---
+
+<Base
+  title="About TORQRON – Spare Parts Partner for Petrochemical Plants"
+  description="TORQRON supplies critical spare parts, granulation tools and engineering support to petrochemical and plastics plants in 12 countries. Mission, team and values."
+  crumbs={crumbs}
+  schema={schema}
+  solidHeader
+>
+  <PageHero
+    title="A partner for petrochemical and industrial operations"
+    lede="Critical parts, precision tools and engineering support for industrial plants across the Middle East, Europe, Turkey and Asia."
+    crumbs={crumbs}
+    image="warehouse-spare-parts.jpg"
+    alt="Warehouse aisle with shelves of stainless steel fittings and spare parts"
+  />
+
+  <section class="limiter block block--bottom">
+    <div class="content grid12">
+      <div class="content__main prose" data-reveal>
+        <h2>Mission and philosophy</h2>
+        <p class="lede">
+          TORQRON exists to keep petrochemical and industrial facilities running stably, efficiently and safely, by delivering the right components, at the right time, with
+          uncompromising quality.
+        </p>
+        <p>
+          For more than 20 years, we have supported plants with reliable supply chain solutions, precision tools and engineering support: <a href="/products/">granulation tools,
+          extruder components, polymer additives and spare parts</a>, backed by <a href="/services/">procurement, refurbishment, installation and logistics services</a>. Put
+          simply, our mission is to deliver critical parts, always on time.
+        </p>
+      </div>
+      <aside class="content__aside">
+        <div class="facts" data-reveal>
+          <h3>How we work</h3>
+          <ul class="dash">
+            {principles.map((p) => <li>{p}</li>)}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="panel panel--tint limiter">
+    <div class="figures grid12 block block--top block--bottom">
+      <div class="figures__main" data-reveal>
+        <h2>Our story</h2>
+        <p class="lede">
+          TORQRON was founded by industry professionals with decades of hands-on experience in petrochemical production, extrusion systems, plant engineering, sealing technology
+          and industrial filtration.
+        </p>
+        <p>
+          From a specialized engineering team, we have grown into a multi-regional procurement and solutions partner, operating across 12 countries and supporting 28+ major
+          industrial facilities.
+        </p>
+      </div>
+      <dl class="figures__list">
+        {
+          figures.map((f, i) => (
+            <div class="figure" data-reveal="right" style={`--i:${i}`}>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="limiter block block--top block--bottom">
+    <div class="content grid12">
+      <div class="content__main">
+        <h2 data-reveal>What makes TORQRON different</h2>
+        <div class="specs" data-reveal>
+          {
+            differences.map((d) => (
+              <div>
+                <h3>{d.title}</h3>
+                <p>{d.text}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="limiter block block--bottom">
+    <div class="content grid12">
+      <div class="content__main">
+        <h2 data-reveal>The team and framework behind our promise</h2>
+        <p class="lede measure" data-reveal>
+          Our team combines decades of experience. We do not outsource responsibility; we take ownership.
+        </p>
+        <div class="specs" data-reveal>
+          <div>
+            <h3>Fields of expertise</h3>
+            <ul class="dash">
+              {expertise.map((e) => <li>{e}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3>How we ensure quality</h3>
+            <ul class="dash">
+              {quality.map((q) => <li>{q}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="content__aside" data-reveal="right">
+        <Image
+          class="figure-round"
+          src={img('screw-elements-studio.jpg')}
+          alt="Extruder screw elements on a dark reflective surface"
+          widths={[480, 720, 960]}
+          sizes="(max-width: 840px) 92vw, (max-width: 1100px) 38vw, 22vw"
+          quality={72}
+          loading="eager"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="limiter block block--bottom">
+    <div>
+      <h2 data-reveal>Our values</h2>
+      <div class="values">
+        {
+          values.map((v, i) => (
+            <div data-reveal style={`--i:${i}`}>
+              <h3 class="h4">{v.title}</h3>
+              <p>{v.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band on-dark">
+    <Image
+      class="band__media"
+      src={img('spare-parts-logistics.jpg')}
+      alt="Wrapped gear units and spare parts on pallets ready for dispatch"
+      widths={[800, 1280, 1536]}
+      sizes="100vw"
+      quality={68}
+      loading="eager"
+    />
+    <div class="band__content">
+      <h2 class="band__text" data-reveal>Twelve countries across the Middle East, Europe, Turkey and Asia</h2>
+      <p class="measure" data-reveal style="--i:1">
+        Proven experience adapting to different regulatory and operational environments, with consolidated sourcing and worldwide delivery under Incoterms 2010.
+      </p>
+      <div data-reveal style="--i:2"><Button tone="white" href="/services/logistics-supply-chain/">Logistics and supply chain</Button></div>
+    </div>
+  </section>
+
+  <section class="limiter block block--top block--bottom">
+    <div>
+      <h2 data-reveal>Products, services and capabilities</h2>
+      <ul class="rows" data-reveal>
+        {
+          more.map((m) => (
+            <li class="row">
+              <h3 class="row__title">
+                <a href={m.href}>{m.title}</a>
+              </h3>
+              <p>{m.text}</p>
+              <span class="round-btn" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7M8.5 7H17v8.5" />
+                </svg>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBar
+    title="Work with a partner who understands industrial reliability."
+    text="Our team supports your procurement, engineering and maintenance needs with speed, precision and consistency."
+  />
+</Base>
+
+<style>
+  /* values: four short statements under thin rules */
+  .values {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.4rem 2rem;
+  }
+
+  .values > div {
+    padding-top: 1.4rem;
+    border-top: 1px solid color-mix(in oklab, var(--ink) 22%, transparent);
+  }
+
+  .values h3 {
+    margin: 0 0 0.8rem;
+  }
+
+  @media (max-width: 1100px) {
+    .values {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .values {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
