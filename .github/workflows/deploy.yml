@@ -25,7 +25,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      # npm install, not npm ci: the lock file is written on macOS and lacks a few Linux-only optional packages
+      - run: npm install --no-audit --no-fund
       - run: npm run build
       # the source links from the domain root; the Pages copy lives in /<repo>/ and must not be indexed
       - run: node scripts/rebase.mjs dist "/${{ github.event.repository.name }}" --noindex
